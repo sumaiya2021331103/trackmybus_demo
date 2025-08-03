@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Enable Location</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body, html {
+      height: 100%;
+      overflow: hidden;
+      position: relative;
+    }
+
+    video#bg-video {
+      position: absolute;
+      right: 0;
+      bottom: 0;
+      min-width: 100%;
+      min-height: 100%;
+      object-fit: cover;
+      z-index: -1;
+    }
+
+    .content {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: rgba(218, 237, 244, 0.85);
+      padding: 40px;
+      border-radius: 15px;
+      text-align: center;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      color: #000000;
+      margin-bottom: 20px;
+    }
+
+    button {
+      padding: 12px 28px;
+      font-size: 1rem;
+      font-weight: 600;
+      color: #fff;
+      background: #5c9785;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background: #3f797d;
+    }
+
+    .confirmation {
+      margin-top: 15px;
+      font-size: 1rem;
+      color: green;
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Background video -->
+  <video autoplay muted loop id="bg-video">
+    <source src="video2.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+
+  <div class="content">
+    <h2>Please enable your location to proceed</h2>
+    <button id="enableLocation">Enable Location</button>
+    <div id="confirmationMsg" class="confirmation">✅ Location shared successfully!</div>
+  </div>
+
+  <script>
+    document.getElementById('enableLocation').addEventListener('click', () => {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+          (position) => {
+            document.getElementById('confirmationMsg').style.display = 'block';
+            setTimeout(() => {
+              window.location.href = 'user_dashboard.html';
+            }, 1500);
+          },
+          (error) => {
+            alert("❌ Location access denied or failed. Please enable it to continue.");
+          }
+        );
+      } else {
+        alert("❌ Geolocation is not supported by this browser.");
+      }
+    });
+  </script>
+
+</body>
+</html>

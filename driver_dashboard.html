@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Driver Dashboard - TrackMyBus</title>
+
+  <script type="module" src="https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js"></script>
+  <script type="module" src="https://www.gstatic.com/firebasejs/11.9.1/firebase-database.js"></script>
+  <script type="module" src="https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h1>Driver Dashboard</h1>
+    
+    <label for="busSelect">Select Your Bus:</label>
+    <select id="busSelect">
+      <option value="bus1">Bus 1</option>
+      <option value="bus2">Bus 2</option>
+      <option value="bus3">Bus 3</option>
+      <option value="bus4">Bus 4</option>
+      <option value="bus5">Bus 5</option>
+    </select>
+
+    <button id="shareBtn">Start Sharing Location</button>
+    <p id="statusMsg"></p>
+  </div>
+
+  <script type="module">
+    import { db } from './config.js';
+    import { ref, set } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-database.js";
+
+    const btn = document.getElementById('shareBtn');
+    const msg = document.getElementById('statusMsg');
+    const busSelect = document.getElementById('busSelect');
+
+    btn.addEventListener('click', () => {
+      if (!navigator.geolocation) {
+        msg.innerText = '❌ Geolocation is not supported by your browser.';
+        return;
+      }
+
+      msg.innerText = '⏳ Requesting location access...';
+
+      // Ask for permission
+      navigator.geolocation.getCurrentPosition(
+        () => {
+          msg.innerText = '✅ Permission granted. Sharing location...';
+
+          navigator.geolocation.watchPosition(
+            (pos) => {
+              const lat = pos.coords.latitude;
+              const lng = pos.coords.longitude;
+              const selectedBus = busSelect.value;
+
+              const locationRef = ref(db, `buses/${selectedBus}`);
+              set(locationRef, {
+                latitude: lat,
+                longitude: lng,
+                timestamp: new Date().toISOString()
+              });
+
+              msg.innerText = `✅ Location updated for ${selectedBus.toUpperCase()}`;
+            },
+            (error) => {
+              msg.innerText = '⚠️ Error while watching position: ' + error.message;
+            },
+            {
+              enableHighAccuracy: true
+            }
+          );
+        },
+        (error) => {
+          msg.innerText = '❌ Location access denied: ' + error.message;
+        }
+      );
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Select a Bus - TrackMyBus</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: #f2f2f2;
+    }
+
+    header {
+      background-color: #3b7a6d;
+      color: white;
+      padding: 1rem;
+      text-align: center;
+      font-size: 1.5rem;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 2rem auto;
+      padding: 1rem;
+    }
+
+    .bus-card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      padding: 1rem 1.5rem;
+      margin-bottom: 1rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: transform 0.2s;
+    }
+
+    .bus-card:hover {
+      transform: scale(1.02);
+      cursor: pointer;
+    }
+
+    .bus-name {
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    .track-btn {
+      background-color: #28a745;
+      color: white;
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    .track-btn:hover {
+      background-color: #218838;
+    }
+
+    .motto {
+      display: inline-block;
+      white-space: nowrap;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    .motto .small {
+      font-size: 26px;
+      color: #321f1f;
+      margin-right: 14px;
+      font-weight: 500;
+    }
+
+    .motto .large {
+      font-size: 40px;
+      color: #00796b;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: -2px;
+    }
+
+    .small {
+      display: inline-block;
+      padding-bottom: 4px;
+      border-bottom: 2px solid #00796b;
+      width: 400px;
+    }
+  </style>
+</head>
+<body>
+  <header>TrackMyBus - Live Bus Tracking</header>
+
+  <div style="margin-top: 0rem; background-color: #e0f7fa; display: flex; align-items: flex-end;">
+    <p class="motto">
+      <span class="small"><i>Say Goodbye to Long Waits</i></span><br><br>
+      <span class="large">Track Your Bus in Real-Time!</span>
+    </p>
+    <img src="waiting.png" alt="Bus Tracking Banner"
+      style="
+        display: block;
+        width: 100%;
+        max-width: 700px;
+        margin-left: auto;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        -webkit-mask-image: linear-gradient(to right, transparent, black);
+        mask-image: linear-gradient(to right, transparent, black);
+      " />
+  </div>
+
+  <div class="container" id="bus-list">
+    <div class="bus-card" onclick="trackBus('bus1')">
+      <div class="bus-name">Bus 1 - Tilagor</div>
+      <button class="track-btn">Track</button>
+    </div>
+    <div class="bus-card" onclick="trackBus('bus2')">
+      <div class="bus-name">Bus 2 - Naiyorpool</div>
+      <button class="track-btn">Track</button>
+    </div>
+    <div class="bus-card" onclick="trackBus('bus3')">
+      <div class="bus-name">Bus 3 - Amberkhana</div>
+      <button class="track-btn">Track</button>
+    </div>
+    <div class="bus-card" onclick="trackBus('bus4')">
+      <div class="bus-name">Bus 4 - Bondor Bazar</div>
+      <button class="track-btn">Track</button>
+    </div>
+    <div class="bus-card" onclick="trackBus('bus5')">
+      <div class="bus-name">Bus 5 - Madina Market</div>
+      <button class="track-btn">Track</button>
+    </div>
+  </div>
+
+  <script>
+    function getUserLocation() {
+      if (!navigator.geolocation) {
+        alert("Geolocation is not supported by your browser.");
+        return;
+      }
+
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          console.log("User Location:", position.coords.latitude, position.coords.longitude);
+        },
+        (error) => {
+          alert("Location access denied. Please allow location to use this feature.");
+        }
+      );
+    }
+
+    function trackBus(busId) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          window.location.href = `track.html?busId=${busId}&userLat=${position.coords.latitude}&userLng=${position.coords.longitude}`;
+        },
+        (error) => {
+          alert("Location access is required to track buses.");
+        }
+      );
+    }
+
+    window.onload = getUserLocation;
+  </script>
+</body>
+</html>
